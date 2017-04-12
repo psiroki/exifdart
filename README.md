@@ -13,6 +13,7 @@ Add this to your package's pubspec.yaml file:
 ```YAML
 dependencies:
   exifdart:
+    git: https://github.com/psiroki/exifdart.git
 ```
 
 ### Install it
