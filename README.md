@@ -25,6 +25,9 @@ $ pub get
 
 Simple example:
 ```Dart
+import "package:package:exifdart/exifdart.dart";
+import "dart:html";
+
 /// Returns the orientation value or `null` if no EXIF or no orientation info
 /// is found.
 Future<int> getOrientation(Blob blob) async {
@@ -37,7 +40,7 @@ Future<int> getOrientation(Blob blob) async {
 }
 
 void main() {
-  document.querySelector("input[type=file]").
+  registerChangeHandler(document.querySelector("input[type=file]"));
 }
 
 void registerChangeHandler(InputElement input) {
