@@ -1,5 +1,5 @@
 name: exifdart
-version: 0.0.1+1
+version: 0.5.0
 description: Decode Exif data from jpeg files.
 homepage: https://www.github.com/psiroki/exifdart/
 environment:
