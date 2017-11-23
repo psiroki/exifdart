@@ -67,7 +67,7 @@ class BlobView {
     }
 
     Future<CacheView> _retrieve(int start, int end) {
-      Completer<Null> completer = new Completer();
+      Completer<CacheView> completer = new Completer();
       FileReader reader = new FileReader();
       reader.onLoad.listen((_) {
         ByteData bytes = (reader.result as Uint8List).buffer.asByteData();
