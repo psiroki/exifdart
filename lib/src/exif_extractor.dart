@@ -163,14 +163,14 @@ class ExifExtractor {
       case 7: // undefined, 8-bit byte, value depending on field
         if (numValues == 1) {
           return file.getUint8(entryOffset + 8);
-        } else {
-          int offset = numValues > 4 ? valueOffset : (entryOffset + 8);
-          ByteData bytes = await file.getBytes(offset, offset + numValues);
-          Uint8List result = new Uint8List(numValues);
-          for (int i = 0; i < result.length; ++i) result[i] = bytes.getUint8(i);
-          return result;
         }
-        break;
+
+        int offset = numValues > 4 ? valueOffset : (entryOffset + 8);
+        ByteData bytes = await file.getBytes(offset, offset + numValues);
+        Uint8List result = new Uint8List(numValues);
+        for (int i = 0; i < result.length; ++i) result[i] = bytes.getUint8(i);
+        return result;
+
       case 2: // ascii, 8-bit byte
         int offset = numValues > 4 ? valueOffset : (entryOffset + 8);
         return getStringFromDB(file, offset, numValues - 1);
@@ -178,74 +178,72 @@ class ExifExtractor {
       case 3: // short, 16 bit int
         if (numValues == 1) {
           return file.getUint16(entryOffset + 8, bigEnd);
-        } else {
-          int offset = numValues > 2 ? valueOffset : (entryOffset + 8);
-          ByteData bytes = await file.getBytes(offset, offset + 2 * numValues);
-          Uint16List result = new Uint16List(numValues);
-          for (int i = 0; i < result.length; ++i)
-            result[i] = bytes.getUint16(i * 2, bigEnd);
-          return result;
         }
 
-        break;
+        int offset = numValues > 2 ? valueOffset : (entryOffset + 8);
+        ByteData bytes = await file.getBytes(offset, offset + 2 * numValues);
+        Uint16List result = new Uint16List(numValues);
+        for (int i = 0; i < result.length; ++i)
+          result[i] = bytes.getUint16(i * 2, bigEnd);
+        return result;
 
       case 4: // long, 32 bit int
         if (numValues == 1) {
           return file.getUint32(entryOffset + 8, bigEnd);
-        } else {
-          int offset = valueOffset;
-          ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
-          Uint32List result = new Uint32List(numValues);
-          for (int i = 0; i < result.length; ++i)
-            result[i] = bytes.getUint32(i * 4, bigEnd);
-          return result;
         }
-        break;
+
+        int offset = valueOffset;
+        ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
+        Uint32List result = new Uint32List(numValues);
+        for (int i = 0; i < result.length; ++i)
+          result[i] = bytes.getUint32(i * 4, bigEnd);
+        return result;
+
       case 5: // rational = two long values, first is numerator, second is denominator
         if (numValues == 1) {
           int numerator = await file.getUint32(valueOffset, bigEnd);
           int denominator = await file.getUint32(valueOffset + 4, bigEnd);
           return new Rational(numerator, denominator);
-        } else {
-          int offset = valueOffset;
-          ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
-          List<Rational> result = new List(numValues);
-          for (int i = 0; i < result.length; ++i) {
-            int numerator = bytes.getUint32(i * 8, bigEnd);
-            int denominator = bytes.getUint32(i * 8 + 4, bigEnd);
-            result[i] = new Rational(numerator, denominator);
-          }
-          return result;
         }
-        break;
+
+        int offset = valueOffset;
+        ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
+        List<Rational> result = new List(numValues);
+        for (int i = 0; i < result.length; ++i) {
+          int numerator = bytes.getUint32(i * 8, bigEnd);
+          int denominator = bytes.getUint32(i * 8 + 4, bigEnd);
+          result[i] = new Rational(numerator, denominator);
+        }
+        return result;
+
       case 9: // slong, 32 bit signed int
         if (numValues == 1) {
           return file.getInt32(entryOffset + 8, bigEnd);
-        } else {
-          int offset = valueOffset;
-          ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
-          Int32List result = new Int32List(numValues);
-          for (int i = 0; i < result.length; ++i)
-            result[i] = bytes.getInt32(i * 4, bigEnd);
-          return result;
         }
-        break;
+
+        int offset = valueOffset;
+        ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
+        Int32List result = new Int32List(numValues);
+        for (int i = 0; i < result.length; ++i)
+          result[i] = bytes.getInt32(i * 4, bigEnd);
+        return result;
+
       case 10: // signed rational, two slongs, first is numerator, second is denominator
         if (numValues == 1) {
           int numerator = await file.getInt32(valueOffset, bigEnd);
           int denominator = await file.getInt32(valueOffset + 4, bigEnd);
           return new Rational(numerator, denominator);
-        } else {
-          int offset = valueOffset;
-          ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
-          List<Rational> result = new List(numValues);
-          for (int i = 0; i < result.length; ++i) {
-            int numerator = bytes.getInt32(i * 8, bigEnd);
-            int denominator = bytes.getInt32(i * 8 + 4, bigEnd);
-            result[i] = new Rational(numerator, denominator);
-          }
-          return result;
         }
+
+        int offset = valueOffset;
+        ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
+        List<Rational> result = new List(numValues);
+        for (int i = 0; i < result.length; ++i) {
+          int numerator = bytes.getInt32(i * 8, bigEnd);
+          int denominator = bytes.getInt32(i * 8 + 4, bigEnd);
+          result[i] = new Rational(numerator, denominator);
+        }
+        return result;
     }
   }
 
