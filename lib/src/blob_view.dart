@@ -9,7 +9,7 @@ class CacheView {
     start <= absPosition && absPosition-start < bytes.lengthInBytes;
 
   bool containsRange(int absStart, int absEnd) => bytes != null &&
-    start <= absStart && absEnd <= absStart + bytes.lengthInBytes;
+    start <= absStart && absEnd <= start + bytes.lengthInBytes;
 
   int getUint8(int offset) => bytes.getUint8(offset-start);
   int getUint16(int offset, Endianness endianness) => bytes.getUint16(offset-start, endianness);
@@ -67,6 +67,8 @@ class BlobView {
     }
 
     Future<CacheView> _retrieve(int start, int end) {
+      if (start >= blob.size) return new Future.value(new CacheView(start, new ByteData(0)));
+      if (end > blob.size) end = blob.size;
       Completer<CacheView> completer = new Completer();
       FileReader reader = new FileReader();
       reader.onLoad.listen((_) {
