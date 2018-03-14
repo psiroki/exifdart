@@ -244,6 +244,30 @@ class ExifExtractor {
           result[i] = new Rational(numerator, denominator);
         }
         return result;
+
+      case 11: // single float, 32 bit float
+        if (numValues == 1) {
+          return file.getFloat32(entryOffset + 8, bigEnd);
+        }
+
+        int offset = valueOffset;
+        ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
+        Float32List result = new Float32List(numValues);
+        for (int i = 0; i < result.length; ++i)
+          result[i] = bytes.getFloat32(i * 4, bigEnd);
+        return result;
+
+      case 12: // double float, 64 bit float
+        if (numValues == 1) {
+          return file.getFloat64(entryOffset + 8, bigEnd);
+        }
+
+        int offset = valueOffset;
+        ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
+        Float64List result = new Float64List(numValues);
+        for (int i = 0; i < result.length; ++i)
+          result[i] = bytes.getFloat64(i * 8, bigEnd);
+        return result;
     }
   }
 
@@ -342,8 +366,12 @@ class ExifExtractor {
       for (String tag in gpsData.keys) {
         switch (tag) {
           case "GPSVersionID":
-            List version = gpsData[tag] as List;
-            gpsData[tag] = version.join(".");
+            var data = gpsData[tag];
+            if (data is List) {
+              gpsData[tag] = data.join(".");
+            } else {
+              gpsData[tag] = data?.toString();
+            }
             break;
         }
         tags[tag] = gpsData[tag];
