@@ -25,7 +25,11 @@ $ pub get
 
 Simple example:
 ```Dart
-import "package:package:exifdart/exifdart.dart";
+// Add this to have the Rational class too:
+// import "package:package:exifdart/exifdart.dart";
+
+// We are not using that in this example, this alone will do fine:
+import "package:package:exifdart/exifdart_html.dart";
 import "dart:html";
 
 /// Returns the orientation value or `null` if no EXIF or no orientation info

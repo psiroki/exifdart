@@ -1,11 +1,11 @@
 import "dart:async";
 import "dart:typed_data";
 import "dart:convert";
-import "dart:html";
 
-import "package:exifdart/src/blob_view.dart";
-import "package:exifdart/src/log_message_sink.dart";
-import "package:exifdart/src/constants.dart";
+import "abstract_reader.dart";
+import "log_message_sink.dart";
+import "constants.dart";
+import "blob_view.dart";
 
 class Rational {
   Rational(this.numerator, this.denominator);
@@ -23,16 +23,16 @@ class Rational {
   final int denominator;
 }
 
-Future<Map<String, dynamic>> readExifFromBlob(Blob blob, [bool printDebugInfo=false]) {
+Future<Map<String, dynamic>> readExif(AbstractBlobReader blob, {bool printDebugInfo=false}) async {
   return new ExifExtractor(printDebugInfo ? new ConsoleMessageSink() : null)
-      .findEXIFinJPEG(new BlobView(blob));
+      .findEXIFinJPEG(await BlobView.create(blob));
 }
 
 class ConsoleMessageSink implements LogMessageSink {
   void log(Object message, [List<Object> additional]) {
     if (message == null) message = "null";
     if (additional != null) message = "${message} ${additional}";
-    window.console.log(message);
+    print(message);
   }
 }
 

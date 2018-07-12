@@ -1,5 +1,5 @@
 name: exifdart
-version: 0.5.0+6
+version: 0.6.0
 author: Peter Siroki <psiroki@users.noreply.github.com>
 description: Decode Exif data from jpeg files (Dart port based on https://github.com/exif-js/exif-js/)
 homepage: https://www.github.com/psiroki/exifdart/

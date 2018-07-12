@@ -1,3 +1,13 @@
+# 0.6.0
+
+- created `AbstractBlobReader` making the core implementation platform independent
+- moved platform dependent code (a HTML Blob based implementation of `AbstractBlobReader`)
+  available by importing `exifdart_html.dart`
+- created a `dart:io` based implementation of `AbstractBlobReader` and made it available
+  in `exifdart_io.dart`
+- this is an API breaking release, you have to import both `exifdart.dart` and
+  `exifdart_html.dart` ot get the old API
+
 # 0.5.0+6
 
 - fixed `null` access on some files that have a type 0 GPSVersionID tag
