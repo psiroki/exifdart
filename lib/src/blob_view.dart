@@ -88,7 +88,7 @@ class BlobView {
     return view.getFloat64(offset, endianness);
   }
 
-  Future<CacheView> _retrieve(int start, int end) => blob.readSlice(start, end);
+  FutureOr<CacheView> _retrieve(int start, int end) => blob.readSlice(start, end);
 
   final AbstractBlobReader blob;
   CacheView _lastCacheView = new CacheView(0, null);
