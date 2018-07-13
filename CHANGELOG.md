@@ -1,3 +1,7 @@
+# 0.6.0+1
+
+- fixed the botched release
+
 # 0.6.0
 
 - created `AbstractBlobReader` making the core implementation platform independent

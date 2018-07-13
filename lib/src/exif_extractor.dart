@@ -12,6 +12,7 @@ class Rational {
 
   double toDouble() => numerator / denominator;
 
+  @override
   String toString() => toDouble().toString();
 
   Map<String, int> toJson() => {
@@ -23,12 +24,14 @@ class Rational {
   final int denominator;
 }
 
-Future<Map<String, dynamic>> readExif(AbstractBlobReader blob, {bool printDebugInfo=false}) async {
+Future<Map<String, dynamic>> readExif(AbstractBlobReader blob,
+    {bool printDebugInfo = false}) async {
   return new ExifExtractor(printDebugInfo ? new ConsoleMessageSink() : null)
       .findEXIFinJPEG(await BlobView.create(blob));
 }
 
 class ConsoleMessageSink implements LogMessageSink {
+  @override
   void log(Object message, [List<Object> additional]) {
     if (message == null) message = "null";
     if (additional != null) message = "${message} ${additional}";

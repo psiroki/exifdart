@@ -5,7 +5,8 @@ import "dart:typed_data";
 import "abstract_reader.dart";
 import "exif_extractor.dart";
 
-Future<Map<String, dynamic>> readExifFromBlob(Blob blob, {bool printDebugInfo=false}) {
+Future<Map<String, dynamic>> readExifFromBlob(Blob blob,
+    {bool printDebugInfo = false}) {
   return readExif(new BlobReader(blob));
 }
 
