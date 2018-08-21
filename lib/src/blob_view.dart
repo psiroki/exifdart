@@ -16,15 +16,15 @@ class CacheView {
       absEnd <= start + bytes.lengthInBytes;
 
   int getUint8(int offset) => bytes.getUint8(offset - start);
-  int getUint16(int offset, Endianness endianness) =>
+  int getUint16(int offset, Endian endianness) =>
       bytes.getUint16(offset - start, endianness);
-  int getUint32(int offset, Endianness endianness) =>
+  int getUint32(int offset, Endian endianness) =>
       bytes.getUint32(offset - start, endianness);
-  int getInt32(int offset, Endianness endianness) =>
+  int getInt32(int offset, Endian endianness) =>
       bytes.getInt32(offset - start, endianness);
-  double getFloat32(int offset, Endianness endianness) =>
+  double getFloat32(int offset, Endian endianness) =>
       bytes.getFloat32(offset - start, endianness);
-  double getFloat64(int offset, Endianness endianness) =>
+  double getFloat64(int offset, Endian endianness) =>
       bytes.getFloat64(offset - start, endianness);
 
   ByteData getBytes(int absStart, int absEnd) => bytes.buffer
@@ -57,7 +57,7 @@ class BlobView {
   }
 
   Future<int> getInt32(int offset,
-      [Endianness endianness = Endianness.BIG_ENDIAN]) async {
+      [Endian endianness = Endian.big]) async {
     if (_lastCacheView.containsRange(offset, offset + 4))
       return new Future.value(_lastCacheView.getInt32(offset, endianness));
     CacheView view = await _retrieve(offset, offset + _pageSize);
@@ -65,7 +65,7 @@ class BlobView {
   }
 
   Future<int> getUint32(int offset,
-      [Endianness endianness = Endianness.BIG_ENDIAN]) async {
+      [Endian endianness = Endian.big]) async {
     if (_lastCacheView.containsRange(offset, offset + 4))
       return new Future.value(_lastCacheView.getUint32(offset, endianness));
     CacheView view = await _retrieve(offset, offset + _pageSize);
@@ -73,7 +73,7 @@ class BlobView {
   }
 
   Future<int> getUint16(int offset,
-      [Endianness endianness = Endianness.BIG_ENDIAN]) async {
+      [Endian endianness = Endian.big]) async {
     if (_lastCacheView.containsRange(offset, offset + 2))
       return new Future.value(_lastCacheView.getUint16(offset, endianness));
     CacheView view = await _retrieve(offset, offset + _pageSize);
@@ -88,7 +88,7 @@ class BlobView {
   }
 
   Future<double> getFloat32(int offset,
-      [Endianness endianness = Endianness.BIG_ENDIAN]) async {
+      [Endian endianness = Endian.big]) async {
     if (_lastCacheView.containsRange(offset, offset + 4))
       return new Future.value(_lastCacheView.getFloat32(offset, endianness));
     CacheView view = await _retrieve(offset, offset + _pageSize);
@@ -96,7 +96,7 @@ class BlobView {
   }
 
   Future<double> getFloat64(int offset,
-      [Endianness endianness = Endianness.BIG_ENDIAN]) async {
+      [Endian endianness = Endian.big]) async {
     if (_lastCacheView.containsRange(offset, offset + 8))
       return new Future.value(_lastCacheView.getFloat64(offset, endianness));
     CacheView view = await _retrieve(offset, offset + _pageSize);

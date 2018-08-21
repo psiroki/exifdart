@@ -137,7 +137,7 @@ class ExifExtractor {
   }
 
   Future<Map<String, dynamic>> readTags(BlobView file, int tiffStart,
-      int dirStart, Map<int, String> strings, Endianness bigEnd) async {
+      int dirStart, Map<int, String> strings, Endian bigEnd) async {
     int entries = await file.getUint16(dirStart, bigEnd);
     Map<String, dynamic> tags = {};
     int entryOffset;
@@ -156,7 +156,7 @@ class ExifExtractor {
   }
 
   Future<dynamic> readTagValue(BlobView file, int entryOffset, int tiffStart,
-      int dirStart, Endianness bigEnd) async {
+      int dirStart, Endian bigEnd) async {
     int type = await file.getUint16(entryOffset + 2, bigEnd);
     int numValues = await file.getUint32(entryOffset + 4, bigEnd);
     int valueOffset = await file.getUint32(entryOffset + 8, bigEnd) + tiffStart;
@@ -276,7 +276,7 @@ class ExifExtractor {
 
   Future<String> getStringFromDB(BlobView buffer, int start, int length) async {
     ByteData bytes = await buffer.getBytes(start, start + length);
-    return UTF8.decode(new List.generate(length, (int i) => bytes.getUint8(i)),
+    return utf8.decode(new List.generate(length, (int i) => bytes.getUint8(i)),
         allowMalformed: true);
   }
 
@@ -287,14 +287,14 @@ class ExifExtractor {
       return null;
     }
 
-    Endianness bigEnd;
+    Endian bigEnd;
     int tiffOffset = start + 6;
 
     // test for TIFF validity and endianness
     if (await file.getUint16(tiffOffset) == 0x4949) {
-      bigEnd = Endianness.LITTLE_ENDIAN;
+      bigEnd = Endian.little;
     } else if (await file.getUint16(tiffOffset) == 0x4D4D) {
-      bigEnd = Endianness.BIG_ENDIAN;
+      bigEnd = Endian.big;
     } else {
       if (debug != null)
         debug.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
@@ -344,7 +344,7 @@ class ExifExtractor {
           case "ExifVersion":
           case "FlashpixVersion":
             exifData[tag] =
-                UTF8.decode((exifData[tag] as List<int>).sublist(0, 4));
+                utf8.decode((exifData[tag] as List<int>).sublist(0, 4));
             break;
 
           case "ComponentsConfiguration":

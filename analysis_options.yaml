@@ -1,10 +1,6 @@
 #  Supported lint rules and documentation:
 #   http://dart-lang.github.io/linter/lints/
 
-analyzer:
-  strong-mode: true
-#  exclude:
-
 
 linter:
   rules:
@@ -50,7 +46,6 @@ linter:
     - super_goes_last
     - type_annotate_public_apis
     - type_init_formals
-    - unnecessary_brace_in_string_interp
     - unnecessary_getters_setters
 
     - package_names
