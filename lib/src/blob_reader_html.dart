@@ -5,8 +5,7 @@ import "dart:typed_data";
 import "abstract_reader.dart";
 import "exif_extractor.dart";
 
-Future<Map<String, dynamic>> readExifFromBlob(Blob blob,
-    {bool printDebugInfo = false}) {
+Future<Map<String, dynamic>> readExifFromBlob(Blob blob, {bool printDebugInfo = false}) {
   return readExif(new BlobReader(blob));
 }
 
@@ -27,8 +26,7 @@ class BlobReader extends AbstractBlobReader {
       completer.complete(bytes);
     });
     reader.onLoadEnd.listen((_) {
-      if (!completer.isCompleted)
-        completer.completeError("Couldn't fetch blob section");
+      if (!completer.isCompleted) completer.completeError("Couldn't fetch blob section");
     });
     reader.readAsArrayBuffer(blob.slice(start, end));
     return completer.future;

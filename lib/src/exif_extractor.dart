@@ -24,8 +24,7 @@ class Rational {
   final int denominator;
 }
 
-Future<Map<String, dynamic>> readExif(AbstractBlobReader blob,
-    {bool printDebugInfo = false}) async {
+Future<Map<String, dynamic>> readExif(AbstractBlobReader blob, {bool printDebugInfo = false}) async {
   return new ExifExtractor(printDebugInfo ? new ConsoleMessageSink() : null)
       .findEXIFinJPEG(await BlobView.create(blob));
 }
@@ -44,8 +43,7 @@ class ExifExtractor {
 
   Future<Map<String, dynamic>> findEXIFinJPEG(BlobView dataView) async {
     if (debug != null) debug.log("Got file of length ${dataView.byteLength}");
-    if ((await dataView.getUint8(0) != 0xFF) ||
-        (await dataView.getUint8(1) != 0xD8)) {
+    if ((await dataView.getUint8(0) != 0xFF) || (await dataView.getUint8(1) != 0xD8)) {
       if (debug != null) debug.log("Not a valid JPEG");
       return null; // not a valid jpeg
     }
@@ -86,22 +84,14 @@ class ExifExtractor {
 
   Future<Object> findIPTCinJPEG(BlobView dataView) async {
     if (debug != null) debug.log("Got file of length ${dataView.byteLength}");
-    if ((await dataView.getUint8(0) != 0xFF) ||
-        (await dataView.getUint8(1) != 0xD8)) {
+    if ((await dataView.getUint8(0) != 0xFF) || (await dataView.getUint8(1) != 0xD8)) {
       if (debug != null) debug.log("Not a valid JPEG");
       return null; // not a valid jpeg
     }
 
     int offset = 2, length = dataView.byteLength;
 
-    const List<int> segmentStartBytes = const [
-      0x38,
-      0x42,
-      0x49,
-      0x4D,
-      0x04,
-      0x04
-    ];
+    const List<int> segmentStartBytes = const [0x38, 0x42, 0x49, 0x4D, 0x04, 0x04];
 
     Future<bool> isFieldSegmentStart(BlobView dataView, int offset) async {
       ByteData data = await dataView.getBytes(offset, offset + 6);
@@ -123,8 +113,7 @@ class ExifExtractor {
         }
 
         int startOffset = offset + 8 + nameHeaderLength;
-        int sectionLength =
-            await dataView.getUint16(offset + 6 + nameHeaderLength);
+        int sectionLength = await dataView.getUint16(offset + 6 + nameHeaderLength);
 
         return readIPTCData(dataView, startOffset, sectionLength);
       }
@@ -136,8 +125,8 @@ class ExifExtractor {
     return null;
   }
 
-  Future<Map<String, dynamic>> readTags(BlobView file, int tiffStart,
-      int dirStart, Map<int, String> strings, Endian bigEnd) async {
+  Future<Map<String, dynamic>> readTags(
+      BlobView file, int tiffStart, int dirStart, Map<int, String> strings, Endian bigEnd) async {
     int entries = await file.getUint16(dirStart, bigEnd);
     Map<String, dynamic> tags = {};
     int entryOffset;
@@ -148,15 +137,13 @@ class ExifExtractor {
       String tag = strings[tagId];
       if (tag == null && debug != null) debug.log("Unknown tag: ${tagId}");
       if (tag != null) {
-        tags[tag] =
-            await readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
+        tags[tag] = await readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
       }
     }
     return tags;
   }
 
-  Future<dynamic> readTagValue(BlobView file, int entryOffset, int tiffStart,
-      int dirStart, Endian bigEnd) async {
+  Future<dynamic> readTagValue(BlobView file, int entryOffset, int tiffStart, int dirStart, Endian bigEnd) async {
     int type = await file.getUint16(entryOffset + 2, bigEnd);
     int numValues = await file.getUint32(entryOffset + 4, bigEnd);
     int valueOffset = await file.getUint32(entryOffset + 8, bigEnd) + tiffStart;
@@ -186,8 +173,7 @@ class ExifExtractor {
         int offset = numValues > 2 ? valueOffset : (entryOffset + 8);
         ByteData bytes = await file.getBytes(offset, offset + 2 * numValues);
         Uint16List result = new Uint16List(numValues);
-        for (int i = 0; i < result.length; ++i)
-          result[i] = bytes.getUint16(i * 2, bigEnd);
+        for (int i = 0; i < result.length; ++i) result[i] = bytes.getUint16(i * 2, bigEnd);
         return result;
 
       case 4: // long, 32 bit int
@@ -198,8 +184,7 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
         Uint32List result = new Uint32List(numValues);
-        for (int i = 0; i < result.length; ++i)
-          result[i] = bytes.getUint32(i * 4, bigEnd);
+        for (int i = 0; i < result.length; ++i) result[i] = bytes.getUint32(i * 4, bigEnd);
         return result;
 
       case 5: // rational = two long values, first is numerator, second is denominator
@@ -227,8 +212,7 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
         Int32List result = new Int32List(numValues);
-        for (int i = 0; i < result.length; ++i)
-          result[i] = bytes.getInt32(i * 4, bigEnd);
+        for (int i = 0; i < result.length; ++i) result[i] = bytes.getInt32(i * 4, bigEnd);
         return result;
 
       case 10: // signed rational, two slongs, first is numerator, second is denominator
@@ -256,8 +240,7 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
         Float32List result = new Float32List(numValues);
-        for (int i = 0; i < result.length; ++i)
-          result[i] = bytes.getFloat32(i * 4, bigEnd);
+        for (int i = 0; i < result.length; ++i) result[i] = bytes.getFloat32(i * 4, bigEnd);
         return result;
 
       case 12: // double float, 64 bit float
@@ -268,16 +251,14 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
         Float64List result = new Float64List(numValues);
-        for (int i = 0; i < result.length; ++i)
-          result[i] = bytes.getFloat64(i * 8, bigEnd);
+        for (int i = 0; i < result.length; ++i) result[i] = bytes.getFloat64(i * 8, bigEnd);
         return result;
     }
   }
 
   Future<String> getStringFromDB(BlobView buffer, int start, int length) async {
     ByteData bytes = await buffer.getBytes(start, start + length);
-    return utf8.decode(new List.generate(length, (int i) => bytes.getUint8(i)),
-        allowMalformed: true);
+    return utf8.decode(new List.generate(length, (int i) => bytes.getUint8(i)), allowMalformed: true);
   }
 
   Future<Map<String, dynamic>> readEXIFData(BlobView file, int start) async {
@@ -296,8 +277,7 @@ class ExifExtractor {
     } else if (await file.getUint16(tiffOffset) == 0x4D4D) {
       bigEnd = Endian.big;
     } else {
-      if (debug != null)
-        debug.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
+      if (debug != null) debug.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
       return null;
     }
 
@@ -309,18 +289,16 @@ class ExifExtractor {
     int firstIFDOffset = await file.getUint32(tiffOffset + 4, bigEnd);
 
     if (firstIFDOffset < 0x00000008) {
-      if (debug != null)
-        debug.log(
-            "Not valid TIFF data! (First offset less than 8) ${firstIFDOffset}");
+      if (debug != null) debug.log("Not valid TIFF data! (First offset less than 8) ${firstIFDOffset}");
       return null;
     }
 
-    Map<String, dynamic> tags = await readTags(file, tiffOffset,
-        tiffOffset + firstIFDOffset, ExifConstants.tiffTags, bigEnd);
+    Map<String, dynamic> tags =
+        await readTags(file, tiffOffset, tiffOffset + firstIFDOffset, ExifConstants.tiffTags, bigEnd);
 
     if (tags.containsKey("ExifIFDPointer")) {
-      Map<String, dynamic> exifData = await readTags(file, tiffOffset,
-          tiffOffset + tags["ExifIFDPointer"], ExifConstants.tags, bigEnd);
+      Map<String, dynamic> exifData =
+          await readTags(file, tiffOffset, tiffOffset + tags["ExifIFDPointer"], ExifConstants.tags, bigEnd);
       for (String tag in exifData.keys) {
         dynamic value = exifData[tag];
         switch (tag) {
@@ -345,14 +323,12 @@ class ExifExtractor {
           case "ExifVersion":
           case "FlashpixVersion":
             if (value is List<int> && value.length >= 4) {
-              exifData[tag] =
-                  utf8.decode((value).sublist(0, 4));
+              exifData[tag] = utf8.decode((value).sublist(0, 4));
             }
             break;
 
           case "ComponentsConfiguration":
-            exifData[tag] =
-                ExifConstants.stringValues["Components"][value[0]] +
+            exifData[tag] = ExifConstants.stringValues["Components"][value[0]] +
                 ExifConstants.stringValues["Components"][value[1]] +
                 ExifConstants.stringValues["Components"][value[2]] +
                 ExifConstants.stringValues["Components"][value[3]];
@@ -363,12 +339,8 @@ class ExifExtractor {
     }
 
     if (tags.containsKey("GPSInfoIFDPointer")) {
-      Map<String, dynamic> gpsData = await readTags(
-          file,
-          tiffOffset,
-          tiffOffset + tags["GPSInfoIFDPointer"],
-          ExifConstants.gpsTags,
-          bigEnd);
+      Map<String, dynamic> gpsData =
+          await readTags(file, tiffOffset, tiffOffset + tags["GPSInfoIFDPointer"], ExifConstants.gpsTags, bigEnd);
       for (String tag in gpsData.keys) {
         switch (tag) {
           case "GPSVersionID":
@@ -387,20 +359,17 @@ class ExifExtractor {
     return tags;
   }
 
-  Future<Map<String, dynamic>> readIPTCData(
-      BlobView dataView, int startOffset, int sectionLength) async {
+  Future<Map<String, dynamic>> readIPTCData(BlobView dataView, int startOffset, int sectionLength) async {
     Map<String, dynamic> data = {};
     int segmentStartPos = startOffset;
     while (segmentStartPos < startOffset + sectionLength) {
-      ByteData bytes =
-          await dataView.getBytes(segmentStartPos, segmentStartPos + 5);
+      ByteData bytes = await dataView.getBytes(segmentStartPos, segmentStartPos + 5);
       if (bytes.getUint8(0) == 0x1C && bytes.getUint8(1) == 0x02) {
         int segmentType = bytes.getUint8(2);
         if (ExifConstants.iptcFieldMap.containsKey(segmentType)) {
           int dataSize = bytes.getInt16(3);
           String fieldName = ExifConstants.iptcFieldMap[segmentType];
-          String fieldValue =
-              await getStringFromDB(dataView, segmentStartPos + 5, dataSize);
+          String fieldValue = await getStringFromDB(dataView, segmentStartPos + 5, dataSize);
           // Check if we already stored a value with this name
           if (data.containsKey(fieldName)) {
             // Value already stored with this name, create multivalue field

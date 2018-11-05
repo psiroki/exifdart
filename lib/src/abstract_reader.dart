@@ -8,8 +8,7 @@ abstract class AbstractBlobReader {
 }
 
 class MemoryBlobReader extends AbstractBlobReader {
-  MemoryBlobReader(List<int> bytes)
-      : _bytes = bytes is Uint8List ? bytes : new Uint8List.fromList(bytes);
+  MemoryBlobReader(List<int> bytes) : _bytes = bytes is Uint8List ? bytes : new Uint8List.fromList(bytes);
 
   @override
   int get byteLength => _bytes.lengthInBytes;

@@ -5,8 +5,7 @@ import "dart:typed_data";
 import "abstract_reader.dart";
 import "exif_extractor.dart";
 
-Future<Map<String, dynamic>> readExifFromFile(File file,
-    {bool printDebugInfo = false}) {
+Future<Map<String, dynamic>> readExifFromFile(File file, {bool printDebugInfo = false}) {
   return readExif(new FileReader(file));
 }
 

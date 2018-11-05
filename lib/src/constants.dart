@@ -21,10 +21,8 @@ class ExifConstants {
     0xA004: "RelatedSoundFile", // Name of related sound file
 
     // date and time
-    0x9003:
-        "DateTimeOriginal", // Date and time when the original image was generated
-    0x9004:
-        "DateTimeDigitized", // Date and time when the image was stored digitally
+    0x9003: "DateTimeOriginal", // Date and time when the original image was generated
+    0x9004: "DateTimeDigitized", // Date and time when the image was stored digitally
     0x9290: "SubsecTime", // Fractions of seconds for DateTime
     0x9291: "SubsecTimeOriginal", // Fractions of seconds for DateTimeOriginal
     0x9292: "SubsecTimeDigitized", // Fractions of seconds for DateTimeDigitized
@@ -49,12 +47,9 @@ class ExifConstants {
     0x920A: "FocalLength", // Focal length of the lens in mm
     0xA20B: "FlashEnergy", // Strobe energy in BCPS
     0xA20C: "SpatialFrequencyResponse", //
-    0xA20E:
-        "FocalPlaneXResolution", // Number of pixels in width direction per FocalPlaneResolutionUnit
-    0xA20F:
-        "FocalPlaneYResolution", // Number of pixels in height direction per FocalPlaneResolutionUnit
-    0xA210:
-        "FocalPlaneResolutionUnit", // Unit for measuring FocalPlaneXResolution and FocalPlaneYResolution
+    0xA20E: "FocalPlaneXResolution", // Number of pixels in width direction per FocalPlaneResolutionUnit
+    0xA20F: "FocalPlaneYResolution", // Number of pixels in height direction per FocalPlaneResolutionUnit
+    0xA210: "FocalPlaneResolutionUnit", // Unit for measuring FocalPlaneXResolution and FocalPlaneYResolution
     0xA214: "SubjectLocation", // Location of subject in image
     0xA215: "ExposureIndex", // Exposure index selected on camera
     0xA217: "SensingMethod", // Image sensor type
@@ -65,13 +60,11 @@ class ExifConstants {
     0xA402: "ExposureMode", // Exposure mode
     0xA403: "WhiteBalance", // 1 = auto white balance, 2 = manual
     0xA404: "DigitalZoomRation", // Digital zoom ratio
-    0xA405:
-        "FocalLengthIn35mmFilm", // Equivalent foacl length assuming 35mm film camera (in mm)
+    0xA405: "FocalLengthIn35mmFilm", // Equivalent foacl length assuming 35mm film camera (in mm)
     0xA406: "SceneCaptureType", // Type of scene
     0xA407: "GainControl", // Degree of overall image gain adjustment
     0xA408: "Contrast", // Direction of contrast processing applied by camera
-    0xA409:
-        "Saturation", // Direction of saturation processing applied by camera
+    0xA409: "Saturation", // Direction of saturation processing applied by camera
     0xA40A: "Sharpness", // Direction of sharpness processing applied by camera
     0xA40B: "DeviceSettingDescription", //
     0xA40C: "SubjectDistanceRange", // Distance to subject
@@ -214,15 +207,11 @@ class ExifConstants {
       0x0045: "Flash fired, red-eye reduction mode, return light not detected",
       0x0047: "Flash fired, red-eye reduction mode, return light detected",
       0x0049: "Flash fired, compulsory flash mode, red-eye reduction mode",
-      0x004D:
-          "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
-      0x004F:
-          "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
+      0x004D: "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
+      0x004F: "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
       0x0059: "Flash fired, auto mode, red-eye reduction mode",
-      0x005D:
-          "Flash fired, auto mode, return light not detected, red-eye reduction mode",
-      0x005F:
-          "Flash fired, auto mode, return light detected, red-eye reduction mode",
+      0x005D: "Flash fired, auto mode, return light not detected, red-eye reduction mode",
+      0x005F: "Flash fired, auto mode, return light detected, red-eye reduction mode",
     },
     "SensingMethod": const {
       1: "Not defined",
