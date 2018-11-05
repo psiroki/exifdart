@@ -1,3 +1,11 @@
+# 0.7.0+1
+
+- fixed when FlashpixVersion is already a string
+
+# 0.7.0
+
+- ported to Dart 2
+
 # 0.6.0+1
 
 - fixed the botched release
