@@ -322,6 +322,7 @@ class ExifExtractor {
       Map<String, dynamic> exifData = await readTags(file, tiffOffset,
           tiffOffset + tags["ExifIFDPointer"], ExifConstants.tags, bigEnd);
       for (String tag in exifData.keys) {
+        dynamic value = exifData[tag];
         switch (tag) {
           case "LightSource":
           case "Flash":
@@ -338,21 +339,23 @@ class ExifExtractor {
           case "Sharpness":
           case "SubjectDistanceRange":
           case "FileSource":
-            exifData[tag] = ExifConstants.stringValues[tag][exifData[tag]];
+            exifData[tag] = ExifConstants.stringValues[tag][value];
             break;
 
           case "ExifVersion":
           case "FlashpixVersion":
-            exifData[tag] =
-                utf8.decode((exifData[tag] as List<int>).sublist(0, 4));
+            if (value is List<int> && value.length >= 4) {
+              exifData[tag] =
+                  utf8.decode((value).sublist(0, 4));
+            }
             break;
 
           case "ComponentsConfiguration":
-            exifData[tag] = ExifConstants.stringValues["Components"]
-                    [exifData[tag][0]] +
-                ExifConstants.stringValues["Components"][exifData[tag][1]] +
-                ExifConstants.stringValues["Components"][exifData[tag][2]] +
-                ExifConstants.stringValues["Components"][exifData[tag][3]];
+            exifData[tag] =
+                ExifConstants.stringValues["Components"][value[0]] +
+                ExifConstants.stringValues["Components"][value[1]] +
+                ExifConstants.stringValues["Components"][value[2]] +
+                ExifConstants.stringValues["Components"][value[3]];
             break;
         }
         tags[tag] = exifData[tag];
