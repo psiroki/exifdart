@@ -1,3 +1,8 @@
+# 0.7.0+2
+
+- added documentation
+- added example
+
 # 0.7.0+1
 
 - fixed when FlashpixVersion is already a string
