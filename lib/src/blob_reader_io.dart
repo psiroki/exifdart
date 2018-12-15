@@ -5,11 +5,15 @@ import "dart:typed_data";
 import "abstract_reader.dart";
 import "exif_extractor.dart";
 
-Future<Map<String, dynamic>> readExifFromFile(File file, {bool printDebugInfo = false}) {
+/// Reads the EXIF info from a `dart:io` `File` object.
+Future<Map<String, dynamic>> readExifFromFile(File file,
+    {bool printDebugInfo = false}) {
   return readExif(new FileReader(file));
 }
 
+/// Reads sections from a `dart:io` `File`.
 class FileReader extends AbstractBlobReader {
+  /// Creates a `FileReader` with the given `File`.
   FileReader(this.file);
 
   @override

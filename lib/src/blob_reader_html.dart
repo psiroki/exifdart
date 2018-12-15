@@ -5,11 +5,15 @@ import "dart:typed_data";
 import "abstract_reader.dart";
 import "exif_extractor.dart";
 
-Future<Map<String, dynamic>> readExifFromBlob(Blob blob, {bool printDebugInfo = false}) {
+/// Reads the EXIF info from a DOM `Blob` object including a `File` object.
+Future<Map<String, dynamic>> readExifFromBlob(Blob blob,
+    {bool printDebugInfo = false}) {
   return readExif(new BlobReader(blob));
 }
 
+/// Reads sections from a (`dart:html`) `Blob` using (`dart:html`) `FileReader`.
 class BlobReader extends AbstractBlobReader {
+  /// Creates the `BlobReader` with the given `Blob`.
   BlobReader(this.blob);
 
   @override
@@ -26,11 +30,13 @@ class BlobReader extends AbstractBlobReader {
       completer.complete(bytes);
     });
     reader.onLoadEnd.listen((_) {
-      if (!completer.isCompleted) completer.completeError("Couldn't fetch blob section");
+      if (!completer.isCompleted)
+        completer.completeError("Couldn't fetch blob section");
     });
     reader.readAsArrayBuffer(blob.slice(start, end));
     return completer.future;
   }
 
+  /// The DOM `Blob`
   final Blob blob;
 }
