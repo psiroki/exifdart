@@ -16,7 +16,7 @@ class MemoryBlobReader extends AbstractBlobReader {
   /// Use this constructor to create a memory blob reader with the given list of bytes.
   /// The [bytes] aren't copied if the type is `Uint8List`.
   MemoryBlobReader(List<int> bytes)
-      : _bytes = bytes is Uint8List ? bytes : new Uint8List.fromList(bytes);
+      : _bytes = bytes is Uint8List ? bytes : Uint8List.fromList(bytes);
 
   @override
   int get byteLength => _bytes.lengthInBytes;

@@ -24,13 +24,14 @@ const Map<int, String> orienationNames = {
 Future main(List<String> args) async {
   if (args.isEmpty || args.contains("-h") || args.contains("--help")) {
     stderr.writeln("Usage:");
-    stderr.writeln("  orientation.dart <filename.jpg>");
+    stderr.writeln("  all_tags.dart <filename.jpg>");
   }
   Map<String, dynamic>? result = await readExifFromFile(File(args[0]));
-  int? orientation = result == null ? null : result["Orientation"];
-  if (orientation == null) {
-    print("Orientation is missing");
+  if (result == null) {
+    print("No exif info found");
   } else {
-    print(orienationNames[orientation] ?? "Reserved");
+    for (String key in result.keys) {
+      print("$key: ${result[key]}");
+    }
   }
 }

@@ -1,3 +1,8 @@
+# 0.8.0-dev.1
+
+- Dart 2.12
+- Null safety
+
 # 0.7.0+2
 
 - added documentation

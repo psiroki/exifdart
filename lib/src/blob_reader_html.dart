@@ -6,9 +6,9 @@ import "abstract_reader.dart";
 import "exif_extractor.dart";
 
 /// Reads the EXIF info from a DOM `Blob` object including a `File` object.
-Future<Map<String, dynamic>> readExifFromBlob(Blob blob,
+Future<Map<String, dynamic>?> readExifFromBlob(Blob blob,
     {bool printDebugInfo = false}) {
-  return readExif(new BlobReader(blob));
+  return readExif(BlobReader(blob));
 }
 
 /// Reads sections from a (`dart:html`) `Blob` using (`dart:html`) `FileReader`.
@@ -21,10 +21,10 @@ class BlobReader extends AbstractBlobReader {
 
   @override
   Future<ByteData> readSlice(int start, int end) {
-    if (start >= blob.size) return new Future.value(new ByteData(0));
+    if (start >= blob.size) return Future.value(ByteData(0));
     if (end > blob.size) end = blob.size;
-    Completer<ByteData> completer = new Completer();
-    FileReader reader = new FileReader();
+    Completer<ByteData> completer = Completer();
+    FileReader reader = FileReader();
     reader.onLoad.listen((_) {
       ByteData bytes = (reader.result as Uint8List).buffer.asByteData();
       completer.complete(bytes);
