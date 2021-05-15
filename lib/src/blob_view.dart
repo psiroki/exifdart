@@ -33,19 +33,24 @@ class DummyCacheView implements CacheView {
   @override
   int getUint8(int offset) => throw UnsupportedError("Cache is empty");
   @override
-  int getUint16(int offset, Endian endianness) => throw UnsupportedError("Cache is empty");
+  int getUint16(int offset, Endian endianness) =>
+      throw UnsupportedError("Cache is empty");
   @override
-  int getUint32(int offset, Endian endianness) => throw UnsupportedError("Cache is empty");
+  int getUint32(int offset, Endian endianness) =>
+      throw UnsupportedError("Cache is empty");
   @override
-  int getInt32(int offset, Endian endianness) => throw UnsupportedError("Cache is empty");
+  int getInt32(int offset, Endian endianness) =>
+      throw UnsupportedError("Cache is empty");
   @override
-  double getFloat32(int offset, Endian endianness) => throw UnsupportedError("Cache is empty");
+  double getFloat32(int offset, Endian endianness) =>
+      throw UnsupportedError("Cache is empty");
   @override
-  double getFloat64(int offset, Endian endianness) => throw UnsupportedError("Cache is empty");
+  double getFloat64(int offset, Endian endianness) =>
+      throw UnsupportedError("Cache is empty");
 
   @override
-  ByteData getBytes(int absStart, int absEnd) =>  throw UnsupportedError("Cache is empty");
-
+  ByteData getBytes(int absStart, int absEnd) =>
+      throw UnsupportedError("Cache is empty");
 }
 
 class RealCacheView implements CacheView {
@@ -53,13 +58,11 @@ class RealCacheView implements CacheView {
 
   @override
   bool contains(int absPosition) =>
-      start <= absPosition &&
-      absPosition - start < bytes.lengthInBytes;
+      start <= absPosition && absPosition - start < bytes.lengthInBytes;
 
   @override
   bool containsRange(int absStart, int absEnd) =>
-      start <= absStart &&
-      absEnd <= start + bytes.lengthInBytes;
+      start <= absStart && absEnd <= start + bytes.lengthInBytes;
 
   @override
   int getUint8(int offset) => bytes.getUint8(offset - start);
@@ -157,8 +160,7 @@ class BlobView {
     FutureOr<ByteData> bytes = blob.readSlice(start, end);
     if (bytes is Future<ByteData>) {
       Future<ByteData> bytesFuture = bytes;
-      return bytesFuture
-          .then((actualBytes) => CacheView(start, actualBytes));
+      return bytesFuture.then((actualBytes) => CacheView(start, actualBytes));
     }
     return CacheView(start, bytes);
   }

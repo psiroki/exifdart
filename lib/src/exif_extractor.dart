@@ -316,8 +316,8 @@ class ExifExtractor {
     int firstIFDOffset = await file.getUint32(tiffOffset + 4, bigEnd);
 
     if (firstIFDOffset < 0x00000008) {
-        debug?.log(
-            "Not valid TIFF data! (First offset less than 8) ${firstIFDOffset}");
+      debug?.log(
+          "Not valid TIFF data! (First offset less than 8) ${firstIFDOffset}");
       return null;
     }
 
@@ -325,8 +325,12 @@ class ExifExtractor {
         tiffOffset + firstIFDOffset, ExifConstants.tiffTags, bigEnd);
 
     if (tags.containsKey("ExifIFDPointer")) {
-      Map<String, dynamic> exifData = await readTags(file, tiffOffset,
-          (tiffOffset + tags["ExifIFDPointer"]).toInt(), ExifConstants.tags, bigEnd);
+      Map<String, dynamic> exifData = await readTags(
+          file,
+          tiffOffset,
+          (tiffOffset + tags["ExifIFDPointer"]).toInt(),
+          ExifConstants.tags,
+          bigEnd);
       for (String tag in exifData.keys) {
         dynamic value = exifData[tag];
         switch (tag) {
@@ -356,8 +360,10 @@ class ExifExtractor {
             break;
 
           case "ComponentsConfiguration":
-            exifData[tag] = Iterable.generate(4, (i) => value[i]).map((index) =>
-            ExifConstants.stringValues["Components"]![index] ?? "").join("");
+            exifData[tag] = Iterable.generate(4, (i) => value[i])
+                .map((index) =>
+                    ExifConstants.stringValues["Components"]![index] ?? "")
+                .join("");
             break;
         }
         tags[tag] = exifData[tag];
