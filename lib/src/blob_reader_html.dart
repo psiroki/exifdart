@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 import "dart:html";
 import "dart:async";
 import "dart:typed_data";
@@ -23,15 +25,16 @@ class BlobReader extends AbstractBlobReader {
   Future<ByteData> readSlice(int start, int end) {
     if (start >= blob.size) return Future.value(ByteData(0));
     if (end > blob.size) end = blob.size;
-    Completer<ByteData> completer = Completer();
-    FileReader reader = FileReader();
+    final completer = Completer<ByteData>();
+    final reader = FileReader();
     reader.onLoad.listen((_) {
-      ByteData bytes = (reader.result as Uint8List).buffer.asByteData();
+      final bytes = (reader.result as Uint8List).buffer.asByteData();
       completer.complete(bytes);
     });
     reader.onLoadEnd.listen((_) {
-      if (!completer.isCompleted)
+      if (!completer.isCompleted) {
         completer.completeError("Couldn't fetch blob section");
+      }
     });
     reader.readAsArrayBuffer(blob.slice(start, end));
     return completer.future;

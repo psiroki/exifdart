@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 import "dart:async";
 import "dart:io";
 import "package:exifdart/exifdart_io.dart";
@@ -26,11 +28,11 @@ Future main(List<String> args) async {
     stderr.writeln("Usage:");
     stderr.writeln("  all_tags.dart <filename.jpg>");
   }
-  Map<String, dynamic>? result = await readExifFromFile(File(args[0]));
+  var result = await readExifFromFile(File(args[0]));
   if (result == null) {
     print("No exif info found");
   } else {
-    for (String key in result.keys) {
+    for (var key in result.keys) {
       print("$key: ${result[key]}");
     }
   }

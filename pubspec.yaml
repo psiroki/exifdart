@@ -4,3 +4,5 @@ description: Decode Exif data from jpeg files (Dart port based on https://github
 homepage: https://www.github.com/psiroki/exifdart/
 environment:
   sdk: '>=2.12.0 <3.0.0'
+dev_dependencies:
+  pedantic: ^1.11.0

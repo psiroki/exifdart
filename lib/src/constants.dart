@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_const
+// ignore_for_file: prefer_single_quotes
+
 class ExifConstants {
   static const Map<int, String> tags = const {
     // version tags

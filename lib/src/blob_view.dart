@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 import "dart:async";
 import "dart:typed_data";
 import "abstract_reader.dart";
@@ -92,10 +94,10 @@ class RealCacheView implements CacheView {
 
 class BlobView {
   static FutureOr<BlobView> create(AbstractBlobReader blob) {
-    FutureOr<int> length = blob.byteLength;
-    if (length is Future)
-      return (length as Future)
-          .then((actualLength) => BlobView._(blob, actualLength));
+    final length = blob.byteLength;
+    if (length is Future<int>) {
+      return length.then((actualLength) => BlobView._(blob, actualLength));
+    }
     return BlobView._(blob, length);
   }
 
@@ -104,65 +106,75 @@ class BlobView {
   final int byteLength;
 
   Future<ByteData> getBytes(int start, int end) async {
-    if (_lastCacheView.containsRange(start, end))
+    if (_lastCacheView.containsRange(start, end)) {
       return Future.value(_lastCacheView.getBytes(start, end));
-    int realEnd = end;
+    }
+    var realEnd = end;
     if (start + _pageSize > realEnd) realEnd = start + _pageSize;
-    CacheView view = await _retrieve(start, realEnd);
+    final view = await _retrieve(start, realEnd);
     return view.getBytes(start, end);
   }
 
   Future<int> getInt32(int offset, [Endian endianness = Endian.big]) async {
-    if (_lastCacheView.containsRange(offset, offset + 4))
+    if (_lastCacheView.containsRange(offset, offset + 4)) {
       return Future.value(_lastCacheView.getInt32(offset, endianness));
-    CacheView view = await _retrieve(offset, offset + _pageSize);
+    }
+    final view = await _retrieve(offset, offset + _pageSize);
     return view.getInt32(offset, endianness);
   }
 
   Future<int> getUint32(int offset, [Endian endianness = Endian.big]) async {
-    if (_lastCacheView.containsRange(offset, offset + 4))
+    if (_lastCacheView.containsRange(offset, offset + 4)) {
       return Future.value(_lastCacheView.getUint32(offset, endianness));
-    CacheView view = await _retrieve(offset, offset + _pageSize);
+    }
+    final view = await _retrieve(offset, offset + _pageSize);
     return view.getUint32(offset, endianness);
   }
 
   Future<int> getUint16(int offset, [Endian endianness = Endian.big]) async {
-    if (_lastCacheView.containsRange(offset, offset + 2))
+    if (_lastCacheView.containsRange(offset, offset + 2)) {
       return Future.value(_lastCacheView.getUint16(offset, endianness));
-    CacheView view = await _retrieve(offset, offset + _pageSize);
+    }
+    final view = await _retrieve(offset, offset + _pageSize);
     return view.getUint16(offset, endianness);
   }
 
   Future<int> getUint8(int offset) async {
-    if (_lastCacheView.contains(offset))
+    if (_lastCacheView.contains(offset)) {
       return Future.value(_lastCacheView.getUint8(offset));
-    CacheView view = await _retrieve(offset, offset + _pageSize);
+    }
+    final view = await _retrieve(offset, offset + _pageSize);
     return view.getUint8(offset);
   }
 
   Future<double> getFloat32(int offset,
       [Endian endianness = Endian.big]) async {
-    if (_lastCacheView.containsRange(offset, offset + 4))
+    if (_lastCacheView.containsRange(offset, offset + 4)) {
       return Future.value(_lastCacheView.getFloat32(offset, endianness));
-    CacheView view = await _retrieve(offset, offset + _pageSize);
+    }
+    final view = await _retrieve(offset, offset + _pageSize);
     return view.getFloat32(offset, endianness);
   }
 
   Future<double> getFloat64(int offset,
       [Endian endianness = Endian.big]) async {
-    if (_lastCacheView.containsRange(offset, offset + 8))
+    if (_lastCacheView.containsRange(offset, offset + 8)) {
       return Future.value(_lastCacheView.getFloat64(offset, endianness));
-    CacheView view = await _retrieve(offset, offset + _pageSize);
+    }
+    final view = await _retrieve(offset, offset + _pageSize);
     return view.getFloat64(offset, endianness);
   }
 
   FutureOr<CacheView> _retrieve(int start, int end) {
-    FutureOr<ByteData> bytes = blob.readSlice(start, end);
+    final bytes = blob.readSlice(start, end);
     if (bytes is Future<ByteData>) {
-      Future<ByteData> bytesFuture = bytes;
-      return bytesFuture.then((actualBytes) => CacheView(start, actualBytes));
+      return bytes.then((actualBytes) {
+        _lastCacheView = CacheView(start, actualBytes);
+        return _lastCacheView;
+      });
     }
-    return CacheView(start, bytes);
+    _lastCacheView = CacheView(start, bytes);
+    return _lastCacheView;
   }
 
   final AbstractBlobReader blob;

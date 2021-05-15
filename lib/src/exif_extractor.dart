@@ -1,3 +1,7 @@
+// ignore_for_file: unnecessary_const
+// ignore_for_file: prefer_single_quotes
+// ignore_for_file: omit_local_variable_types
+
 import "dart:async";
 import "dart:typed_data";
 import "dart:convert";
@@ -42,8 +46,8 @@ Future<Map<String, dynamic>?> readExif(AbstractBlobReader blob,
 class ConsoleMessageSink implements LogMessageSink {
   @override
   void log(Object? message, [List<Object>? additional]) {
-    if (message == null) message = "null";
-    if (additional != null) message = "${message} ${additional}";
+    message ??= "null";
+    if (additional != null) message = "$message $additional";
     print(message);
   }
 }
@@ -66,8 +70,8 @@ class ExifExtractor {
     while (offset < length) {
       int lastValue = await dataView.getUint8(offset);
       if (lastValue != 0xFF) {
-        debug?.log("Not a valid marker at offset ${offset}, "
-            "found: ${lastValue}");
+        debug?.log("Not a valid marker at offset $offset, "
+            "found: $lastValue");
         return null; // not a valid marker, something is wrong
       }
 
@@ -154,7 +158,7 @@ class ExifExtractor {
       entryOffset = dirStart + i * 12 + 2;
       int tagId = await file.getUint16(entryOffset, bigEnd);
       String? tag = strings[tagId];
-      if (tag == null) debug?.log("Unknown tag: ${tagId}");
+      if (tag == null) debug?.log("Unknown tag: $tagId");
       if (tag != null) {
         tags[tag] =
             await readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
@@ -179,7 +183,9 @@ class ExifExtractor {
         int offset = numValues > 4 ? valueOffset : (entryOffset + 8);
         ByteData bytes = await file.getBytes(offset, offset + numValues);
         Uint8List result = Uint8List(numValues);
-        for (int i = 0; i < result.length; ++i) result[i] = bytes.getUint8(i);
+        for (int i = 0; i < result.length; ++i) {
+          result[i] = bytes.getUint8(i);
+        }
         return result;
 
       case 2: // ascii, 8-bit byte
@@ -194,8 +200,9 @@ class ExifExtractor {
         int offset = numValues > 2 ? valueOffset : (entryOffset + 8);
         ByteData bytes = await file.getBytes(offset, offset + 2 * numValues);
         Uint16List result = Uint16List(numValues);
-        for (int i = 0; i < result.length; ++i)
+        for (int i = 0; i < result.length; ++i) {
           result[i] = bytes.getUint16(i * 2, bigEnd);
+        }
         return result;
 
       case 4: // long, 32 bit int
@@ -206,8 +213,9 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
         Uint32List result = Uint32List(numValues);
-        for (int i = 0; i < result.length; ++i)
+        for (int i = 0; i < result.length; ++i) {
           result[i] = bytes.getUint32(i * 4, bigEnd);
+        }
         return result;
 
       case 5: // rational = two long values, first is numerator, second is denominator
@@ -235,8 +243,9 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
         Int32List result = Int32List(numValues);
-        for (int i = 0; i < result.length; ++i)
+        for (int i = 0; i < result.length; ++i) {
           result[i] = bytes.getInt32(i * 4, bigEnd);
+        }
         return result;
 
       case 10: // signed rational, two slongs, first is numerator, second is denominator
@@ -264,8 +273,9 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 4 * numValues);
         Float32List result = Float32List(numValues);
-        for (int i = 0; i < result.length; ++i)
+        for (int i = 0; i < result.length; ++i) {
           result[i] = bytes.getFloat32(i * 4, bigEnd);
+        }
         return result;
 
       case 12: // double float, 64 bit float
@@ -276,8 +286,9 @@ class ExifExtractor {
         int offset = valueOffset;
         ByteData bytes = await file.getBytes(offset, offset + 8 * numValues);
         Float64List result = Float64List(numValues);
-        for (int i = 0; i < result.length; ++i)
+        for (int i = 0; i < result.length; ++i) {
           result[i] = bytes.getFloat64(i * 8, bigEnd);
+        }
         return result;
     }
   }
@@ -291,7 +302,7 @@ class ExifExtractor {
   Future<Map<String, dynamic>?> readEXIFData(BlobView file, int start) async {
     String startingString = await getStringFromDB(file, start, 4);
     if (startingString != "Exif") {
-      debug?.log("Not valid EXIF data! ${startingString}");
+      debug?.log("Not valid EXIF data! $startingString");
       return null;
     }
 
@@ -317,7 +328,7 @@ class ExifExtractor {
 
     if (firstIFDOffset < 0x00000008) {
       debug?.log(
-          "Not valid TIFF data! (First offset less than 8) ${firstIFDOffset}");
+          "Not valid TIFF data! (First offset less than 8) $firstIFDOffset");
       return null;
     }
 

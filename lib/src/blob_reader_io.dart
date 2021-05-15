@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 import "dart:io";
 import "dart:async";
 import "dart:typed_data";
@@ -24,24 +26,25 @@ class FileReader extends AbstractBlobReader {
 
   @override
   Future<ByteData> readSlice(int start, int end) async {
-    int size = await byteLength;
+    final size = await byteLength;
     if (start >= size) return ByteData(0);
     if (end > size) end = size;
-    List<List<int>> blocks = await file.openRead(start, end).toList();
-    if (blocks.length > 0) {
-      int overallSize = blocks.fold(0, (sum, block) => sum + block.length);
-      Uint8List bytes = Uint8List(overallSize);
-      int offset = 0;
-      for (List<int> block in blocks) {
+    final blocks = await file.openRead(start, end).toList();
+    if (blocks.isNotEmpty) {
+      final overallSize =
+          blocks.fold<int>(0, (sum, block) => sum + block.length);
+      final bytes = Uint8List(overallSize);
+      var offset = 0;
+      for (var block in blocks) {
         bytes.setRange(offset, block.length, block);
         offset += block.length;
       }
       return bytes.buffer.asByteData();
     } else {
       if (blocks.isEmpty) return ByteData(0);
-      List<int> block = blocks.first;
+      var block = blocks.first;
       if (block is! TypedData) block = Uint8List.fromList(block);
-      TypedData b = block as TypedData;
+      final b = block as TypedData;
       return b.buffer.asByteData(b.offsetInBytes, b.lengthInBytes);
     }
   }

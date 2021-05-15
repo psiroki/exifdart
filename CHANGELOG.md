@@ -1,3 +1,14 @@
+# 0.8.0-dev.2
+
+- Fixed most warnings and hints
+- However I'm not going to lie down to the quote mafia, I'm pretty sure
+  the velociraptors aren't coming (https://xkcd.com/292/)
+- I'm not going to remove local variable types from the ported JS code,
+  because I think it's dumb, and dangerous, but I did remove local
+  variable types for trivial cases to make somebody somewhere less
+  unhappy about my package
+- Don't get me started on the lack of consistency of the two rules above
+
 # 0.8.0-dev.1
 
 - Dart 2.12

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 import "dart:async";
 import "dart:io";
 import "package:exifdart/exifdart_io.dart";
@@ -26,8 +28,8 @@ Future main(List<String> args) async {
     stderr.writeln("Usage:");
     stderr.writeln("  orientation.dart <filename.jpg>");
   }
-  Map<String, dynamic>? result = await readExifFromFile(File(args[0]));
-  int? orientation = result == null ? null : result["Orientation"];
+  var result = await readExifFromFile(File(args[0]));
+  var orientation = result == null ? null : result["Orientation"];
   if (orientation == null) {
     print("Orientation is missing");
   } else {
